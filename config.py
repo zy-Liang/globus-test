@@ -6,8 +6,8 @@ from parsl.addresses import address_by_interface
 
 user_opts = {
     'greatlakes': {
-        'worker_init': 'module load python',
-        'scheduler_options': '',
+        'worker_init': 'module load gcc cuda/11.7.1 cudnn/11.7-v8.7.0 python3.9-anaconda; source /nfs/turbo/umms-dinov/LLaMA/1.0.1/bin/activate',
+        'scheduler_options': '#SBATCH --gpus=1',
     }
 }
 
@@ -20,9 +20,9 @@ config = Config(
             worker_debug=True,
             address=address_by_interface('eth4'),  # Great Lakes eth4 armis/lh may use different values
             provider=SlurmProvider(
-                partition='standard',  # update for slurm -p --partition value
+                partition='spgpu',  # update for slurm -p --partition value
                 launcher=SrunLauncher(),
-				account='support',  # update for slurm -A --account value
+				account='dinov99',  # update for slurm -A --account value
 
                 # string to prepend to #SBATCH blocks in the submit
                 # script to the scheduler eg: '#SBATCH --constraint=knl,quad,cache'
