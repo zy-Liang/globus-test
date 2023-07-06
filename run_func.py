@@ -27,5 +27,5 @@ with Executor(endpoint_id=test_endpoint_id) as gce:
     print("\nSubmitted the function to Globus endpoint.\n")
     # ... and finally, wait for the result
     # print(future.result())
-    with open("output.txt", "w") as out:
+    with open("debug/output.txt", "w") as out:
         out.write(future.result())
