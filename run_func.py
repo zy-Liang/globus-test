@@ -19,7 +19,7 @@ def submit_job():
         return output.stderr.decode()
 
 
-test_endpoint_id = '03d80c2e-f629-497a-a38c-85819e5f3209'
+test_endpoint_id = 'b9d9099c-4aed-499c-a020-743041a15521'
 # ... then create the executor, ...
 with Executor(endpoint_id=test_endpoint_id) as gce:
     # ... then submit for execution, ...
