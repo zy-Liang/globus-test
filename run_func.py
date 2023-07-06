@@ -1,20 +1,31 @@
 from globus_compute_sdk import Executor
 from pprint import pprint
-import time
 
 
 # First, define the function ...
-def add_func(a, b):
+def submit_job():
+    import subprocess
     import time
-    time.sleep(10)
-    return a + b
+    output = None
+    # submit a new job to slurm
+    output = subprocess.run(["torchrun", "--nproc_per_node", "1", 
+                             "/home/zyliang/llama-test/llama/example.py",
+                             "--ckpt_dir", "/nfs/turbo/umms-dinov/LLaMA/1.0.1/llama/modeltoken/7B",
+                             "--tokenizer_path", "/nfs/turbo/umms-dinov/LLaMA/1.0.1/llama/modeltoken/tokenizer.model"],
+                            capture_output=True)
+    if output.stderr is None:
+        return output.stdout.decode()
+    else:
+        return output.stderr.decode()
 
-tutorial_endpoint_id = '6b4b7c27-3fd5-4f12-a529-96f2f1dfffdf' # Public tutorial endpoint
-#tutorial_endpoint_id = '657ee312-da8a-497e-9026-a6faf4b16cf8' # Public tutorial endpoint
+
+test_endpoint_id = '39b51ca4-2138-44c6-aca6-1d0eecd760a0'
 # ... then create the executor, ...
-with Executor(endpoint_id=tutorial_endpoint_id) as gce:
+with Executor(endpoint_id=test_endpoint_id) as gce:
     # ... then submit for execution, ...
-    future = gce.submit(add_func, 5, 10)
-
+    future = gce.submit(submit_job)
+    print("\nSubmitted the function to Globus endpoint.\n")
     # ... and finally, wait for the result
-    print(future.result())
+    # print(future.result())
+    with open("output.txt", "w") as out:
+        out.write(future.result())
