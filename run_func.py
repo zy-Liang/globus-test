@@ -5,8 +5,6 @@ from pprint import pprint
 # First, define the function ...
 def submit_job():
     import subprocess
-    import time
-    output = None
     # run llama with torch
     output = subprocess.run(["torchrun", "--nproc_per_node", "1", 
                              "/home/zyliang/llama-test/llama/example.py",
