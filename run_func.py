@@ -7,13 +7,13 @@ def submit_job():
     import subprocess
     import time
     output = None
-    # submit a new job to slurm
+    # run llama with torch
     output = subprocess.run(["torchrun", "--nproc_per_node", "1", 
                              "/home/zyliang/llama-test/llama/example.py",
                              "--ckpt_dir", "/nfs/turbo/umms-dinov/LLaMA/1.0.1/llama/modeltoken/7B",
                              "--tokenizer_path", "/nfs/turbo/umms-dinov/LLaMA/1.0.1/llama/modeltoken/tokenizer.model"],
                             capture_output=True)
-    if output.stderr is None:
+    if output.returncode == 0:
         return output.stdout.decode()
     else:
         return output.stderr.decode()
