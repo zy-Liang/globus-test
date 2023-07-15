@@ -1,9 +1,10 @@
 from globus_compute_sdk import Executor
 from pprint import pprint
+import argparse
 
 
 # First, define the function ...
-def submit_job(prompt:str = "The capital of France is"):
+def submit_job(prompt:str):
     import subprocess
     # run llama with torch
     output = subprocess.run(["torchrun", "--nproc_per_node", "1", 
@@ -18,10 +19,16 @@ def submit_job(prompt:str = "The capital of France is"):
 
 
 test_endpoint_id = 'b9d9099c-4aed-499c-a020-743041a15521'
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--prompt", type=str)
+args = parser.parse_args()
+prompt = args.prompt
+if prompt is None:
+    prompt = "The capital of France is"
 # ... then create the executor, ...
 with Executor(endpoint_id=test_endpoint_id) as gce:
     # ... then submit for execution, ...
-    prompt = "Hello LLaMA!"
     future = gce.submit(submit_job, prompt)
     print("\nSubmitted the function to Globus endpoint.\n")
     # ... and finally, wait for the result
