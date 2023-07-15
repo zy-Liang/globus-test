@@ -1,5 +1,5 @@
 from globus_compute_endpoint.endpoint.utils.config import Config
-from globus_compute_endpoint.executors import HighThroughputExecutor
+from globus_compute_endpoint.engines import HighThroughputEngine
 from parsl.providers import SlurmProvider
 from parsl.launchers import SrunLauncher
 from parsl.addresses import address_by_interface
@@ -13,7 +13,7 @@ user_opts = {
 
 config = Config(
     executors=[
-        HighThroughputExecutor(
+        HighThroughputEngine(
             worker_port_range = (8888,8987),
             interchange_port_range = (8888,8987),
             max_workers_per_node=2,
